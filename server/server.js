@@ -21,6 +21,8 @@ const corsOption = {
 
 
 const app = express();
+// Trust proxy for Vercel deployment
+app.set('trust proxy', 1);
 app.use(helmet());
 const PORT = process.env.PORT  || 3000;
 MongodbConnection();
