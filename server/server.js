@@ -37,7 +37,7 @@ const corsOption = {
 const app = express();
 
 // Trust proxy for Vercel deployment - must be first!
-app.set('trust proxy', true);
+app.set('trust proxy',1);
 
 app.use(helmet());
 const PORT = process.env.PORT  || 3000;
@@ -48,17 +48,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-    standardHeaders: 'draft-8',
-    legacyHeaders: false,
-    trustProxy: true, // Trust the X-Forwarded-For header
-    ipv6Subnet: 56,
-    skip: (req) => {
-        // Skip rate limiting for options requests (CORS preflight)
-        return req.method === 'OPTIONS';
-    }
-})
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 // Apply the rate limiting middleware to all requests.
 app.use(limiter)
 app.use('/api/v1/users',User_Routes)
