@@ -1,0 +1,86 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/register",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/login",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/contactUs",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/aboutUs",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/prices",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/privacypolicy",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/forgotpassword",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/FAQ",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/service",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/refundpolicy",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/studentprofile",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/support",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/jobs",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/jobs/detail/page/(.*)",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/jobapplicationtracker",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/handlejobapplication",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/recruiter",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/recruiter/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+} 
