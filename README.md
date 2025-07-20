@@ -77,7 +77,7 @@ A full-stack job portal application built with React.js and Node.js that connect
 
 1. Clone the repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/Mo-hit99/jobPortal.git
 ```
 
 2. Install backend dependencies
