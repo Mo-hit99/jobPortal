@@ -11,7 +11,7 @@ import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit'
 dotenv.config();
 const URL_LINK = process.env.CLIENT_LINK || 'http://localhost:5173';
-console.log(URL_LINK)
+
 const corsOption = {
     origin:`${URL_LINK}`,
     methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
