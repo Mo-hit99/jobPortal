@@ -9,14 +9,16 @@ import Application_Routes from './routes/Application_Routes.js';
 import cors from 'cors';
 import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit'
-
+dotenv.config();
+const URL_LINK = process.env.CLIENT_LINK || 'http://localhost:5173';
+console.log(URL_LINK)
 const corsOption = {
-    origin:'http://localhost:5173',
+    origin:`${URL_LINK}`,
     methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
     credentials: true, // Allow cookies and credentials to be sent in cross-origin requests
 }
-dotenv.config();
+
 
 const app = express();
 app.use(helmet());
