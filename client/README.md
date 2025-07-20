@@ -178,7 +178,7 @@ The application uses a centralized API service layer that provides:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone [<repository-url>](https://github.com/Mo-hit99/jobPortal.git)
    cd JobPortal/client
    ```
 
