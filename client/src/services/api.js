@@ -1,8 +1,8 @@
 import axios from 'axios';
-
+const URL_LINK = import.meta.env.VITE_BACKEND_LINK ||'http://localhost:4000/api/v1';
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: 'http://localhost:4000/api/v1',
+  baseURL: `${URL_LINK}`,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
