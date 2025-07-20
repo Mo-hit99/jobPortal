@@ -10,13 +10,27 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit'
 dotenv.config();
-const URL_LINK = process.env.CLIENT_LINK || 'http://localhost:5173';
+const allowedOrigins = [
+    process.env.CLIENT_LINK || 'http://localhost:5173',
+    'https://job-portal-five-kappa.vercel.app',
+    'https://job-portal-b15h.vercel.app',
+    'http://localhost:5173'
+];
 
 const corsOption = {
-    origin:`${URL_LINK}`,
+    origin: function (origin, callback) {
+        // allow requests with no origin (like mobile apps, curl, postman)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-    credentials: true, // Allow cookies and credentials to be sent in cross-origin requests
+    credentials: true // Allow cookies and credentials to be sent in cross-origin requests
 }
 
 
