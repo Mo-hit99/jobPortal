@@ -47,10 +47,9 @@ const initializeMongoDB = async () => {
         await MongodbConnection();
     } catch (error) {
         console.error('Failed to connect to MongoDB. Retrying in 5 seconds...');
-        setTimeout(initializeMongoDB, 5000);
     }
 };
-
+// add intance function
 initializeMongoDB();
 app.use(cors(corsOption))
 app.use(express.json());
