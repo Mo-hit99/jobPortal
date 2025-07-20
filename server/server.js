@@ -41,7 +41,18 @@ app.set('trust proxy',1);
 
 app.use(helmet());
 const PORT = process.env.PORT  || 3000;
-MongodbConnection();
+
+// Initialize MongoDB connection with retries
+const initializeMongoDB = async () => {
+    try {
+        await MongodbConnection();
+    } catch (error) {
+        console.error('Failed to connect to MongoDB. Retrying in 5 seconds...');
+        setTimeout(initializeMongoDB, 5000);
+    }
+};
+
+initializeMongoDB();
 app.use(cors(corsOption))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
