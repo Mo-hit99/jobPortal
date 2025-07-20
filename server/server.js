@@ -8,7 +8,6 @@ import Job_Routes from './routes/Job_Routes.js';
 import Application_Routes from './routes/Application_Routes.js';
 import cors from 'cors';
 import helmet from 'helmet';
-import { rateLimit } from 'express-rate-limit'
 dotenv.config();
 const allowedOrigins = [
     process.env.CLIENT_LINK || 'http://localhost:5173',
@@ -34,13 +33,13 @@ const corsOption = {
 }
 
 
+const PORT = process.env.PORT  || 3000;
 const app = express();
 
 // Trust proxy for Vercel deployment - must be first!
-app.set('trust proxy',1);
+
 
 app.use(helmet());
-const PORT = process.env.PORT  || 3000;
 
 // Initialize MongoDB connection with retries
 const initializeMongoDB = async () => {
@@ -58,14 +57,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-// Apply the rate limiting middleware to all requests.
-app.use(limiter)
+
 app.use('/api/v1/users',User_Routes)
 app.use('/api/v1/company',Company_Routes)
 app.use('/api/v1/jobs',Job_Routes);
