@@ -28,7 +28,7 @@ export default function NavLinks() {
  
   async function logoutHandler(){
     try {
-      const response =await axios.get('http://localhost:4000/api/v1/users/logout',{withCredentials: true});
+      const response =await axios.get(import.meta.env.VITE_BACKEND_LINK ,{withCredentials: true});
 
       if(response){
         dispatch(logout())
