@@ -68,11 +68,13 @@ const initializeMongoDB = async (retries = 5) => {
 initializeMongoDB();
 app.use(cors(corsOption));
 
-// Add headers for Vercel
+// Add headers for Vercel (complementary to CORS)
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    // Only add headers if CORS didn't already handle them
+    if (!res.headersSent) {
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    }
 
     if (req.method === 'OPTIONS') {
         res.sendStatus(200);
