@@ -10,6 +10,7 @@ import Application_Routes from './routes/Application_Routes.js';
 import cors from 'cors';
 import helmet from 'helmet';
 dotenv.config();
+
 const allowedOrigins = [
     process.env.CLIENT_LINK || 'http://localhost:5173',
     'https://job-portal-five-kappa.vercel.app',
@@ -33,12 +34,11 @@ const corsOption = {
     credentials: true // Allow cookies and credentials to be sent in cross-origin requests
 }
 
-
 const PORT = process.env.PORT  || 3000;
 const app = express();
 
 // Trust proxy for Vercel deployment - must be first!
-
+app.set('trust proxy', 1);
 
 app.use(helmet());
 

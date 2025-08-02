@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "build": "echo 'Backend API - No build output required'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-deployment": "node test-deployment.js"
   },
   "keywords": [],
   "author": "",
