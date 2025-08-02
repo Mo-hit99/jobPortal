@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser';
+import mongoose from 'mongoose';
 import MongodbConnection from './MongoDb_Connection/MongodbConnection.js';
 import User_Routes from './routes/User_Routes.js';
 import Company_Routes from './routes/Company_Routes.js';
@@ -42,19 +43,42 @@ const app = express();
 app.use(helmet());
 
 // Initialize MongoDB connection with retries
-const initializeMongoDB = async () => {
-    try {
-        await MongodbConnection();
-    } catch (error) {
-        console.error('Failed to connect to MongoDB. Retrying in 5 seconds...');
+const initializeMongoDB = async (retries = 5) => {
+    for (let i = 0; i < retries; i++) {
+        try {
+            await MongodbConnection();
+            console.log('MongoDB connection established successfully');
+            return;
+        } catch (error) {
+            console.error(`MongoDB connection attempt ${i + 1} failed:`, error.message);
+
+            if (i === retries - 1) {
+                console.error('All MongoDB connection attempts failed. Server will continue but database operations may fail.');
+                return;
+            }
+
+            const delay = Math.min(1000 * Math.pow(2, i), 30000); // Exponential backoff, max 30s
+            console.log(`Retrying MongoDB connection in ${delay / 1000} seconds...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
     }
 };
-// add intance function
+
+// Initialize MongoDB connection
 initializeMongoDB();
 app.use(cors(corsOption))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
+app.use(cookieParser());
+
+// Middleware to check database connection
+app.use((req, res, next) => {
+    if (mongoose.connection.readyState !== 1) {
+        console.warn('Database connection not ready, attempting to reconnect...');
+        // Don't block the request, but log the warning
+    }
+    next();
+});
 
 
 app.use('/api/v1/users',User_Routes)

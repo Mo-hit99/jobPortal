@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import otpTemplate from "../EmailTemplate/otpVerificationTemplate.js";
 import { successfullyResetPasswordTemplate } from "../EmailTemplate/SuccessfullyResetPasswordTemplate.js";
+import { withTimeout, retryDbOperation } from "../utils/dbUtils.js";
 
 const Max_age = 3 * 24 * 60 * 60;
 
@@ -40,7 +41,7 @@ export const createUser = async (req, res) => {
     }
 
     const otp = generateOpt();
-    const exist = await User.findOne({ email });
+    const exist = await retryDbOperation(() => User.findOne({ email }));
     if (exist) {
       return res.status(400).json({ message: "User already existed!" });
     }
@@ -140,7 +141,7 @@ export const login = async (req, res) => {
       });
     }
 
-    let existUser = await User.findOne({ email });
+    let existUser = await retryDbOperation(() => User.findOne({ email }));
 
     if (!existUser) {
       return res.status(400).json({ message: "User already existed!" });
