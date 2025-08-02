@@ -51,7 +51,7 @@ const JobDetails = lazy(() => import("./pages/JobDetails"));
 function App() {
   return (
     <>
-      {/* <AuthCheck /> */}
+      <AuthCheck />
       <NavBar />
       <Suspense fallback={<LoaderSpinner />}>
         <Routes>
