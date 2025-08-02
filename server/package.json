@@ -1,11 +1,12 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "sever.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
+    "build": "echo 'No build step required for Node.js backend'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
