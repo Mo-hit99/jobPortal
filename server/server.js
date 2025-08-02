@@ -91,6 +91,12 @@ app.get('/', (req, res) => {
 }
 );
 
-app.listen(PORT, () => {
-    console.log(`http://localhost:${PORT}`);
-});
+// For Vercel deployment, we export the app instead of listening
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}
+
+// Export the Express app for Vercel
+export default app;

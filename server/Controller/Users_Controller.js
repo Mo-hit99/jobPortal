@@ -28,68 +28,92 @@ export const createUser = async (req, res) => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])[A-Za-z\d@$!%*?&]{8,}$/;
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!email || !password || !FullName || !phoneNumber || !role) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required"
+      });
     }
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ message: "Invalid email" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email format"
+      });
     }
     if (!passwordRegex.test(password)) {
       return res.status(400).json({
-        message:
-          "Password must be 8 characters long and contain at least one uppercase,lowercase,number and special character",
+        success: false,
+        message: "Password must be 8 characters long and contain at least one uppercase, lowercase, number and special character",
       });
     }
 
     const otp = generateOpt();
     const exist = await retryDbOperation(() => User.findOne({ email }));
     if (exist) {
-      return res.status(400).json({ message: "User already existed!" });
+      return res.status(400).json({
+        success: false,
+        message: "User with this email already exists!"
+      });
     }
 
     const salt = await bcrypt.genSalt(10);
-
     const hashPassword = await bcrypt.hash(password, salt);
+
     if (!otp) {
-      return res.status(400).json({ message: "invalid Otp" });
+      return res.status(400).json({
+        success: false,
+        message: "Failed to generate OTP"
+      });
     }
-    const user = await User.create({
-      FullName,
-      email,
+
+    const user = await retryDbOperation(() => User.create({
+      FullName: FullName.trim(),
+      email: email.toLowerCase().trim(),
       otp,
       phoneNumber,
       role,
       password: hashPassword,
-    });
-    const token = createToken(user._id);
+    }));
 
-    let transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
-      auth: {
-        user: process.env.NODE_MAIL_ID,
-        pass: process.env.NODE_MAILER_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false, // This will bypass the self-signed certificate check
-      },
-    });
-    let mailOptions = {
-      from: `"JobPortal" <${process.env.NODE_MAIL_ID}>`,
-      to: `${user.email}`,
-      subject: "verification Email",
-      html: otpTemplate(user.name, otp),
-    };
+    // Send email asynchronously (don't wait for it to complete)
+    setImmediate(async () => {
+      try {
+        let transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 587,
+          secure: false,
+          requireTLS: true,
+          auth: {
+            user: process.env.NODE_MAIL_ID,
+            pass: process.env.NODE_MAILER_PASSWORD,
+          },
+          tls: {
+            rejectUnauthorized: false,
+          },
+        });
 
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-      } else {
-        return res.send({ Status: "Success" });
+        let mailOptions = {
+          from: `"Job Portal" <${process.env.NODE_MAIL_ID}>`,
+          to: user.email,
+          subject: "Verify your email",
+          html: otpTemplate(user.FullName, otp),
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log(`OTP email sent to ${user.email}`);
+      } catch (emailError) {
+        console.error('Failed to send OTP email:', emailError);
       }
     });
-    res.status(201).json({ message: " register successful" });
+
+    res.status(201).json({
+      success: true,
+      message: "User created successfully. Please check your email for OTP verification.",
+      data: {
+        userId: user._id,
+        email: user.email,
+        fullName: user.FullName
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
