@@ -68,6 +68,7 @@ export const companyAPI = {
   createCompany: (companyData) => api.post('/company/companyRegister', companyData),
   getCompanies: () => api.get('/company/getCompanyData'),
   getCompanyById: (id) => api.get(`/company/getCompanyData/${id}`),
+  updateCompany: (id, companyData) => api.put(`/company/update/companyData/${id}`, companyData),
 };
 
 export default api; 
