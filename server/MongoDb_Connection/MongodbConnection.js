@@ -20,7 +20,8 @@ export default async function MongodbConnection() {
             maxIdleTimeMS: 30000,
         };
 
-        await mongoose.connect(process.env.MONGO_URL, options);
+        const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/jobportal';
+        await mongoose.connect(mongoUrl, options);
         console.log("MongoDB Connected Successfully");
 
         // Handle connection events

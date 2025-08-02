@@ -33,7 +33,7 @@ const corsOption = {
     credentials: true // Allow cookies and credentials to be sent in cross-origin requests
 }
 
-const PORT = process.env.PORT  || 3000;
+const PORT = process.env.PORT  || 4000;
 const app = express();
 
 // Trust proxy for Vercel deployment - must be first!
@@ -123,6 +123,12 @@ app.get('/health', (req, res) => {
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Server running on http://localhost:${PORT}`);
+        console.log(`Health check available at http://localhost:${PORT}/health`);
+    }).on('error', (error) => {
+        console.error('Server failed to start:', error.message);
+        if (error.code === 'EADDRINUSE') {
+            console.error(`Port ${PORT} is already in use. Please try a different port.`);
+        }
     });
 }
 
