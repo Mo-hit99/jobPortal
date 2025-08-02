@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import useGetSingleJob from '../hooks/useGetSingleJob';
 import ApplyJobButton from './ApplyJobButton';
 import { FaMoneyBillWave, FaBriefcase, FaClock, FaCalendarAlt } from 'react-icons/fa';
-import { applicationsAPI } from '../services/api';
+import { applicationsAPI, getErrorMessage, ERROR_MESSAGES } from '../services/api';
 
 export default function JobDetailPage() {
   const { id } = useParams();
@@ -18,7 +18,11 @@ export default function JobDetailPage() {
     if (user?.role === "Student") {
       applicationsAPI.getAppliedJobs().then(res => {
         setAppliedJobIds(res.data.map(app => app.job?._id).filter(Boolean));
-      }).catch(() => setAppliedJobIds([]));
+      }).catch((error) => {
+        const errorMessage = getErrorMessage(error, ERROR_MESSAGES.FETCH_APPLICATIONS);
+        console.error('Error fetching applied jobs:', errorMessage);
+        setAppliedJobIds([]);
+      });
     }
   }, [user]);
   

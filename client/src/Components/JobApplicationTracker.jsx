@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { applicationsAPI } from '../services/api';
+import { applicationsAPI, getErrorMessage, ERROR_MESSAGES } from '../services/api';
 import { useSelector } from 'react-redux';
 
 export default function JobApplicationTracker() {
@@ -31,7 +31,8 @@ export default function JobApplicationTracker() {
         setApplications(response.data);
       }
     } catch (error) {
-      setError("Failed to fetch applications. Please try again.");
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.FETCH_APPLICATIONS);
+      setError(errorMessage);
       console.error("Error fetching applications:", error);
     } finally {
       setLoading(false);

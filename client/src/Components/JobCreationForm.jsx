@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import JobitEditor from 'jodit-react'
-import { jobsAPI, companyAPI } from '../services/api'
-import { useSelector } from 'react-redux'
+import { jobsAPI, companyAPI, getErrorMessage, ERROR_MESSAGES } from '../services/api'
 import { NavLink } from 'react-router'
 
 export default function JobCreationForm() {
@@ -13,7 +12,7 @@ export default function JobCreationForm() {
   const [companies, setCompanies] = useState([]);
   const [loadingCompanies, setLoadingCompanies] = useState(false);
   
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
   
   const [jobData, setJobData] = useState({
     title: '',
@@ -40,7 +39,8 @@ export default function JobCreationForm() {
         setCompanies(response.data);
       }
     } catch (error) {
-      console.error('Error fetching companies:', error);
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.FETCH_COMPANIES);
+      console.error('Error fetching companies:', errorMessage);
     } finally {
       setLoadingCompanies(false);
     }
@@ -101,7 +101,8 @@ export default function JobCreationForm() {
         setContent('');
       }
     } catch (error) {
-      setError(error.response?.data?.message || "Failed to create job. Please try again.");
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.CREATE_JOB);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

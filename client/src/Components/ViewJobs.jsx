@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { jobsAPI } from "../services/api";
+import { jobsAPI, getErrorMessage, ERROR_MESSAGES } from "../services/api";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
@@ -34,8 +34,9 @@ export default function ViewJobs() {
           setJobs([]);
           setTotalPages(1);
         }
-      } catch {
-        setError("Failed to fetch jobs. Please try again.");
+      } catch (error) {
+        const errorMessage = getErrorMessage(error, ERROR_MESSAGES.FETCH_JOBS);
+        setError(errorMessage);
         setJobs([]);
         setTotalPages(1);
       } finally {

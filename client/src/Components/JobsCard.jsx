@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useSearchParams } from "react-router";
-import { jobsAPI, applicationsAPI } from "../services/api";
+import { jobsAPI, applicationsAPI, getErrorMessage, ERROR_MESSAGES } from "../services/api";
 import { useSelector } from "react-redux";
 import ApplyJobButton from "./ApplyJobButton";
 
@@ -34,7 +34,11 @@ export default function JobsCard() {
     if (user?.role === "Student") {
       applicationsAPI.getAppliedJobs().then(res => {
         setAppliedJobIds(res.data.map(app => app.job?._id).filter(Boolean));
-      }).catch(() => setAppliedJobIds([]));
+      }).catch((error) => {
+        const errorMessage = getErrorMessage(error, ERROR_MESSAGES.FETCH_APPLICATIONS);
+        console.error('Error fetching applied jobs:', errorMessage);
+        setAppliedJobIds([]);
+      });
     }
     // eslint-disable-next-line
   }, [searchQuery, currentPage, user]);
@@ -94,7 +98,8 @@ export default function JobsCard() {
       setTotalPages(response.data.totalPages || 1);
       setTotalJobs(response.data.totalJobs || 0);
     } catch (error) {
-      setError("Failed to fetch jobs. Please try again.");
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.FETCH_JOBS);
+      setError(errorMessage);
       setJobs([]);
       setTotalPages(1);
       setTotalJobs(0);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { applicationsAPI } from '../services/api';
+import { applicationsAPI, getErrorMessage, ERROR_MESSAGES } from '../services/api';
 import { useSelector } from 'react-redux';
 
 export default function ApplyJobButton({ jobId, onSuccess, disabled, label, small }) {
@@ -32,7 +32,8 @@ export default function ApplyJobButton({ jobId, onSuccess, disabled, label, smal
         }
       }
     } catch (error) {
-      setError(error.response?.data?.message || "Failed to apply for job. Please try again.");
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.APPLY_JOB);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

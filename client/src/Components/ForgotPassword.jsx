@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { authAPI } from "../services/api";
+import { authAPI, getErrorMessage, ERROR_MESSAGES } from "../services/api";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -31,7 +31,8 @@ export default function ForgotPassword() {
         setEmail("");
       }
     } catch (error) {
-      setError(error.response?.data?.message || "Failed to send reset email. Please try again.");
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.FORGOT_PASSWORD);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -34,6 +34,17 @@ api.interceptors.response.use(
   }
 );
 
+// Helper function to get consistent error messages
+const getErrorMessage = (error, defaultMessage) => {
+  if (error.response?.data?.message) {
+    return error.response.data.message;
+  }
+  if (error.message) {
+    return error.message;
+  }
+  return defaultMessage;
+};
+
 // Auth API calls
 export const authAPI = {
   register: (userData) => api.post('/users/register', userData),
@@ -71,4 +82,41 @@ export const companyAPI = {
   updateCompany: (id, companyData) => api.put(`/company/update/companyData/${id}`, companyData),
 };
 
+// Error message constants for consistent messaging
+export const ERROR_MESSAGES = {
+  // Jobs related errors
+  FETCH_JOBS: "Failed to fetch jobs. Please try again.",
+  FETCH_SINGLE_JOB: "Failed to fetch job details. Please try again.",
+  CREATE_JOB: "Failed to create job. Please try again.",
+  FETCH_ADMIN_JOBS: "Failed to fetch admin jobs. Please try again.",
+  
+  // Applications related errors
+  APPLY_JOB: "Failed to apply for job. Please try again.",
+  FETCH_APPLICATIONS: "Failed to fetch applications. Please try again.",
+  FETCH_APPLICANTS: "Failed to fetch applicants. Please try again.",
+  UPDATE_APPLICATION_STATUS: "Failed to update application status. Please try again.",
+  
+  // Company related errors
+  CREATE_COMPANY: "Failed to create company. Please try again.",
+  FETCH_COMPANIES: "Failed to fetch companies. Please try again.",
+  FETCH_COMPANY: "Failed to fetch company details. Please try again.",
+  UPDATE_COMPANY: "Failed to update company. Please try again.",
+  
+  // Auth related errors
+  REGISTER: "Registration failed. Please try again.",
+  LOGIN: "Login failed. Please check your credentials.",
+  LOGOUT: "Logout failed. Please try again.",
+  CHECK_AUTH: "Failed to verify authentication. Please try again.",
+  VERIFY_OTP: "OTP verification failed. Please try again.",
+  FORGOT_PASSWORD: "Failed to send reset email. Please try again.",
+  RESET_PASSWORD: "Failed to reset password. Please try again.",
+  UPDATE_PROFILE: "Failed to update profile. Please try again.",
+  
+  // Generic errors
+  NETWORK_ERROR: "Network error. Please check your connection and try again.",
+  SERVER_ERROR: "Server error. Please try again later.",
+  UNKNOWN_ERROR: "An unexpected error occurred. Please try again.",
+};
+
+export { getErrorMessage };
 export default api; 

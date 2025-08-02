@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import bg_image from "../assets/signUpAndLoginIn_image/man-search-hiring-job-online-from-laptop_1150-52728.jpg";
-import { authAPI } from "../services/api";
+import { authAPI, getErrorMessage, ERROR_MESSAGES } from "../services/api";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -78,7 +78,8 @@ export default function SignUp() {
         setShowOTPModal(true);
       }
     } catch (error) {
-      setError(error.response?.data?.message || "Registration failed. Please try again.");
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.REGISTER);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -101,7 +102,8 @@ export default function SignUp() {
         }, 2000);
       }
     } catch (error) {
-      setError(error.response?.data?.message || "OTP verification failed. Please try again.");
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.VERIFY_OTP);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

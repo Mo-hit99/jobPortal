@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { companyAPI } from '../services/api';
+import { companyAPI, getErrorMessage, ERROR_MESSAGES } from '../services/api';
 
 export default function CompanyCreationForm({ onCompanyCreated }) {
   const [loading, setLoading] = useState(false);
@@ -60,7 +60,8 @@ export default function CompanyCreationForm({ onCompanyCreated }) {
         }
       }
     } catch (error) {
-      setError(error.response?.data?.message || "Failed to create company. Please try again.");
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.CREATE_COMPANY);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

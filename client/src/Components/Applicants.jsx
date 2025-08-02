@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router';
-import { applicationsAPI } from '../services/api';
+import { applicationsAPI, getErrorMessage, ERROR_MESSAGES } from '../services/api';
 
 const statusOptions = ['Pending', 'Shortlisted', 'Hired', 'Rejected', 'Interview'];
 
@@ -23,8 +23,9 @@ export default function Applicants() {
         } else {
           setApplicants([]);
         }
-      } catch {
-        setError("Failed to fetch applicants. Please try again.");
+      } catch (error) {
+        const errorMessage = getErrorMessage(error, ERROR_MESSAGES.FETCH_APPLICANTS);
+        setError(errorMessage);
         setApplicants([]);
       } finally {
         setLoading(false);
@@ -45,14 +46,15 @@ export default function Applicants() {
     try {
       await applicationsAPI.updateApplicationStatus(applicantId, newStatus);
       // Optionally, show a success message or toast here
-    } catch {
+    } catch (error) {
       // Revert status if API call fails
       setApplicants((prev) =>
         prev.map((applicant) =>
           applicant._id === applicantId ? { ...applicant, status: prevStatus } : applicant
         )
       );
-      alert("Failed to update status. Please try again.");
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.UPDATE_APPLICATION_STATUS);
+      alert(errorMessage);
     }
   };
 

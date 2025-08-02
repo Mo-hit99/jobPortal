@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { useDispatch, useSelector } from 'react-redux'
 // import bg_image from "../assets/signUpAndLoginIn_image/recruit-agent-analyzing-candidates_74855-4565.jpg";
-import { authAPI } from "../services/api";
+import { authAPI, getErrorMessage, ERROR_MESSAGES } from "../services/api";
 import { setUser } from "../redux/authSlice";
 
 export default function LoginPage() {
@@ -75,7 +75,8 @@ export default function LoginPage() {
         navigate('/');
       }
     } catch (error) {
-      setError(error.response?.data?.message || "Login failed. Please check your credentials.");
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.LOGIN);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

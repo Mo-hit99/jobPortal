@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { authAPI } from "../services/api";
+import { authAPI, getErrorMessage, ERROR_MESSAGES } from "../services/api";
 import { logout } from "../redux/authSlice";
 import Avatar from "./Avatar";
 export default function NavLinks() {
@@ -35,7 +35,8 @@ export default function NavLinks() {
         navigate('/login');
       }
     } catch (error) {
-      console.log('Logout error:', error);
+      const errorMessage = getErrorMessage(error, ERROR_MESSAGES.LOGOUT);
+      console.error('Logout error:', errorMessage);
       // Even if logout fails, clear local state and redirect
       dispatch(logout());
       navigate('/login');
