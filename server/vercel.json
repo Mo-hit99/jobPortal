@@ -1,27 +1,22 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/index.js",
-      "use": "@vercel/node"
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30
     },
-    {
-      "src": "api/users.js",
-      "use": "@vercel/node"
+    "api/users.js": {
+      "maxDuration": 30
     },
-    {
-      "src": "api/company.js",
-      "use": "@vercel/node"
+    "api/company.js": {
+      "maxDuration": 30
     },
-    {
-      "src": "api/jobs.js",
-      "use": "@vercel/node"
+    "api/jobs.js": {
+      "maxDuration": 30
     },
-    {
-      "src": "api/application.js",
-      "use": "@vercel/node"
+    "api/application.js": {
+      "maxDuration": 30
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/v1/users/(.*)",
@@ -43,22 +38,5 @@
       "src": "/(.*)",
       "dest": "/api/index.js"
     }
-  ],
-  "functions": {
-    "api/index.js": {
-      "maxDuration": 30
-    },
-    "api/users.js": {
-      "maxDuration": 30
-    },
-    "api/company.js": {
-      "maxDuration": 30
-    },
-    "api/jobs.js": {
-      "maxDuration": 30
-    },
-    "api/application.js": {
-      "maxDuration": 30
-    }
-  }
+  ]
 }
