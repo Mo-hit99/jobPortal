@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import { authAPI } from "../services/api";
 import { logout } from "../redux/authSlice";
 import Avatar from "./Avatar";
 export default function NavLinks() {
@@ -28,14 +28,17 @@ export default function NavLinks() {
  
   async function logoutHandler(){
     try {
-      const response =await axios.get(import.meta.env.VITE_BACKEND_LINK ,{withCredentials: true});
-
-      if(response){
-        dispatch(logout())
-         navigate('/login')
+      const response = await authAPI.logout();
+      
+      if(response.status === 200){
+        dispatch(logout());
+        navigate('/login');
       }
     } catch (error) {
-      console.log(error)
+      console.log('Logout error:', error);
+      // Even if logout fails, clear local state and redirect
+      dispatch(logout());
+      navigate('/login');
     }
   }
   return (
