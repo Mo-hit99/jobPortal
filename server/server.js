@@ -12,7 +12,6 @@ import helmet from 'helmet';
 dotenv.config();
 
 const allowedOrigins = [
-    process.env.CLIENT_LINK || 'http://localhost:5173',
     'https://job-portal-five-kappa.vercel.app',
     'https://job-portal-b15h.vercel.app',
     'http://localhost:5173'
