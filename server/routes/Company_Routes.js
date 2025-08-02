@@ -6,8 +6,8 @@ import isAuthenticated from '../middlewares/authMiddleware.js';
 const Company_Routes = express.Router();
 
 
-Company_Routes.get('/getCompanyData',isAuthenticated,getCompanyData)
-Company_Routes.get('/getCompanyData/:id',isAuthenticated,getByIdCompanyData)
+Company_Routes.get('/getCompanyData',getCompanyData)
+Company_Routes.get('/getCompanyData/:id',getByIdCompanyData)
 
 Company_Routes.post('/companyRegister',isAuthenticated,registerCompany)
 

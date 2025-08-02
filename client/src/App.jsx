@@ -7,11 +7,6 @@ import LoaderSpinner from "./Components/LoaderSpinner";
 import RecruiterDashboard from "./Components/RecruiterDashboard";
 import AnimatedGradient from "./Components/AnimatedGradient";
 import ProtectedRoute from "./Components/ProtectedRoute";
-
-import AuthCheck from "./Components/AuthCheck";
-
-
-
 const ForgotPassword = lazy(()=> import('./Components/ForgotPassword'))
 const DashboardIntro = lazy(() => import("./Components/DashboardIntro"));
 const RefundPolicyPage = lazy(()=> import('./pages/RefundPolicyPage'))
@@ -51,7 +46,7 @@ const JobDetails = lazy(() => import("./pages/JobDetails"));
 function App() {
   return (
     <>
-      <AuthCheck />
+     
       <NavBar />
       <Suspense fallback={<LoaderSpinner />}>
         <Routes>

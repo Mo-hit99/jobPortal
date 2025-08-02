@@ -5,8 +5,8 @@ import { applyJob, getApplicants, getAppliedJobs, updateStatus } from '../Contro
 const Application_Routes = express.Router();
 
 
-Application_Routes.post('/applyjob/:id',isAuthenticated,applyJob)
-Application_Routes.get('/getapplyjob',isAuthenticated,getAppliedJobs)
+Application_Routes.post('/applyjob/:id',applyJob)
+Application_Routes.get('/getapplyjob',getAppliedJobs)
 Application_Routes.get('/:id/applicant',isAuthenticated,getApplicants)
 Application_Routes.post('/applicant/status/:id',isAuthenticated,updateStatus)
 
