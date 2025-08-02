@@ -100,9 +100,23 @@ app.use('/api/v1/jobs',Job_Routes);
 app.use('/api/v1/application',Application_Routes)
 
 app.get('/', (req, res) => {
-    res.send('Hello World');
-}
-);
+    res.json({
+        success: true,
+        message: 'Job Portal Backend API is running!',
+        timestamp: new Date().toISOString(),
+        version: '1.0.0'
+    });
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({
+        success: true,
+        status: 'healthy',
+        database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+        timestamp: new Date().toISOString()
+    });
+});
 
 // For Vercel deployment, we export the app instead of listening
 if (process.env.NODE_ENV !== 'production') {
